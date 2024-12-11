@@ -1,4 +1,4 @@
-"use client"; // Marking this component as client-side
+"use client";
 
 import { useDarkMode } from "@/app/providers/DarkmodeProvider";
 import React, { useState } from "react";
@@ -6,6 +6,8 @@ import { IoMdSearch } from "react-icons/io";
 import Link from "next/link";
 import { client } from "@/lib/contentful";
 import PostCard from "../PostCard/PostCard";
+import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import RightSection from "../RightSection/RightSection";
 
 interface BlogPost {
   title: string;
@@ -13,19 +15,21 @@ interface BlogPost {
 }
 
 const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
-  const { darkMode } = useDarkMode(); // Client-side hook
-  const postsPerPage = 4; // Set how many posts to show per page
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const { darkMode } = useDarkMode();
+  const postsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Calculate the posts to display for the current page
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Calculate total number of pages
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
-  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -33,7 +37,7 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
   if (!posts) {
     return <div>No posts available</div>;
   }
-
+console.log('=>', posts)
   return (
     <div className={darkMode ? "bg-black" : "bg-white"}>
       <div className="container mx-auto px-4 py-6">
@@ -43,12 +47,28 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
               darkMode ? "bg-gray-900" : "bg-gray-100"
             }`}
           >
-            {posts.length === 0 ? (
-              <p>No posts available</p>
+            {filteredPosts.length === 0 ? (
+              <div className="flex items-center justify-center h-full w-full">
+                <div className={`text-center p-6   rounded-lg  `}>
+                  <div className="mb-4 flex justify-center">
+                    <IoMdSearch
+                      size={40}
+                      className="text-gray-500 dark:text-gray-400"
+                    />
+                  </div>
+                  <h2
+                    className={`text-2xl font-semibold ${
+                      darkMode ? "text-gray-200" : "text-gray-900"
+                    }`}
+                  >
+                    No Results Found
+                  </h2>
+                </div>
+              </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 {currentPosts.map((post: any, index: any) => (
-                  <PostCard key={index} post={post} />
+                  <PostCard key={post.slug} post={post} />
                 ))}
               </div>
             )}
@@ -61,9 +81,13 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
                     currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  Prev
+                  <MdArrowBackIos />
                 </button>
-                <span className="text-lg font-semibold">
+                <span
+                  className={`text-lg font-semibold ${
+                    darkMode ? "text-white" : "text-black"
+                  }`}
+                >
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
@@ -75,78 +99,17 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
                       : ""
                   }`}
                 >
-                  Next
+                  <MdArrowForwardIos />
                 </button>
               </div>
             )}
           </div>
 
-          {/* Right Section - Search & Recent Posts */}
-          <div
-            className={`md:col-span-1 p-6 rounded-lg shadow-md ${
-              darkMode ? "bg-gray-900" : "bg-gray-100"
-            }`}
-          >
-            {/* Search Bar */}
-            <div
-              className={`p-6 rounded-lg shadow-md mb-6 ${
-                darkMode ? "bg-gray-800" : "bg-gray-200"
-              }`}
-            >
-              <h3
-                className={`text-lg font-semibold ${
-                  darkMode ? "text-gray-200" : "text-gray-900"
-                }`}
-              >
-                Search
-              </h3>
-              <div className="mt-4 relative">
-                <input
-                  type="text"
-                  placeholder="Search articles..."
-                  className={`w-full border rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 ${
-                    darkMode
-                      ? "text-gray-200 bg-gray-800 border-gray-700 focus:ring-purple-500"
-                      : "text-gray-900 bg-gray-100 border-gray-300 focus:ring-purple-500"
-                  }`}
-                />
-                <button className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-800">
-                  <IoMdSearch size={25} />
-                </button>
-              </div>
-            </div>
-
-            {/* Recent Posts */}
-            <div
-              className={`p-6 rounded-lg shadow-md ${
-                darkMode ? "bg-gray-800" : "bg-gray-200"
-              }`}
-            >
-              <h3
-                className={`text-lg font-semibold ${
-                  darkMode ? "text-gray-200" : "text-gray-900"
-                }`}
-              >
-                Recent Posts
-              </h3>
-              <ul className="mt-4 space-y-4">
-                {posts.map((post, i) => (
-                  <li key={i}>
-                    <Link
-                      href={`/posts/${post.slug}`}
-                      className={`text-purple-500 hover:underline ${
-                        darkMode ? "text-purple-500" : "text-purple-600"
-                      }`}
-                    >
-                      {post?.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Pagination Controls */}
-          </div>
+          <RightSection
+            posts={posts}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
         </div>
       </div>
     </div>

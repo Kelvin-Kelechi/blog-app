@@ -4,10 +4,34 @@ import { IoMdSearch } from "react-icons/io";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useDarkMode } from "@/app/providers/DarkmodeProvider";
 import { BiSolidGridAlt } from "react-icons/bi";
-
+import { usePosts } from "@/app/providers/PostProvider";
+const posts = [
+  { id: 1, title: "Understanding React" },
+  { id: 2, title: "Introduction to Next.js" },
+  { id: 3, title: "Mastering Tailwind CSS" },
+];
 const Header = () => {
+  const { posts } = usePosts();
+ 
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState(posts);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setFilteredPosts(posts);
+    } else {
+      setFilteredPosts(
+        posts.filter((post) =>
+          post.title.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
+  };
 
   return (
     <header
@@ -16,12 +40,10 @@ const Header = () => {
       } shadow-md sticky top-0 z-10 transition-colors duration-300`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-2">
-        {/* Logo */}
         <div className="text-2xl md:text-3xl font-poppins font-bold text-purple-600 hover:text-purple-400 transition duration-300">
           <a href="/">Purplify</a>
         </div>
 
-        {/* Navigation Links (Desktop) */}
         <nav className="hidden md:flex space-x-6">
           <a href="/home" className="hover:text-gray-500">
             Home
@@ -37,23 +59,54 @@ const Header = () => {
           </a>
         </nav>
 
-        {/* Search Bar */}
         <div className="relative hidden md:block w-64">
           <input
             type="text"
             placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearch}
             className={`w-full border rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 ${
               darkMode
-                ? "text-gray-200 bg-gray-800 focus:ring-purple-500"
-                : "text-gray-800 bg-white focus:ring-purple-500"
+                ? "text-gray-200 bg-gray-800 border-gray-700 focus:ring-purple-500"
+                : "text-gray-900 bg-gray-100 border-gray-300 focus:ring-purple-500"
             }`}
           />
-          <button className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-200">
+          <button
+            className={`absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 ${
+              darkMode ? "hover:text-gray-200" : "hover:text-gray-800"
+            }`}
+          >
             <IoMdSearch size={25} />
           </button>
+          {searchQuery && (
+            <div
+              className={`absolute mt-2 w-full ${
+                darkMode ? "bg-gray-800" : "bg-gray-200"
+              }   ${
+                darkMode ? "border-gray-700" : "border-gray-300"
+              } rounded-lg shadow-lg max-h-48 overflow-y-auto`}
+            >
+              {filteredPosts.length > 0 ? (
+                filteredPosts.map((post, i) => (
+                  <a
+                    key={i}
+                    href={`/posts/${post.slug}`}
+                    className={`block px-4 py-2 text-sm hover:bg-purple-500 ${
+                      darkMode ? "" : "hover:text-white"
+                    }`}
+                  >
+                    {post.title}
+                  </a>
+                ))
+              ) : (
+                <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                  No results found
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gray-200 focus:outline-none"
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
@@ -64,7 +117,6 @@ const Header = () => {
           />
         </button>
 
-        {/* Dark Mode Switch */}
         <div className="flex items-center">
           <label htmlFor="darkModeToggle" className="cursor-pointer">
             <div className="relative">
@@ -87,7 +139,6 @@ const Header = () => {
                     darkMode ? "translate-x-6" : ""
                   }`}
                 >
-                  {/* Icon inside the toggle switch */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     {darkMode ? (
                       <FiSun className="text-yellow-500" size={18} />
@@ -102,7 +153,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <nav
           className={`md:hidden ${

@@ -1,0 +1,62 @@
+import React from "react";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { BLOCKS, INLINES } from "@contentful/rich-text-types";
+import Image from "next/image";
+
+export default function PostContent({
+  darkMode,
+  post,
+}: {
+  darkMode: boolean;
+  post: any;
+}) {
+  const richTextOptions = {
+    renderNode: {
+      [BLOCKS.PARAGRAPH]: (node: any, children: any) => (
+        <p className={darkMode ? "text-white" : "text-black"}>{children}</p>
+      ),
+      [INLINES.HYPERLINK]: (node: any, children: any) => (
+        <a href={node.data.uri} className="text-blue-500 underline">
+          {children}
+        </a>
+      ),
+    },
+  };
+
+  return (
+    <div>
+      <h1 className="text-4xl font-bold">{post.title}</h1>
+
+      <div className="mt-4">
+        {post.imageUrl && (
+          <Image
+            src={`https:${post.imageUrl}`}
+            alt={post.title}
+            width={600}
+            height={400}
+            className="w-full h-48 object-cover"
+          />
+        )}
+      </div>
+      <div className="flex items-center mb-4 mt-4">
+        <Image
+          width={50}
+          height={50}
+          src={`https:${post.author.fields.picture.fields.file.url}`}
+          alt=""
+          className="w-10 h-10 rounded-full object-cover mr-3"
+        />
+        <span
+          className={`text-sm font-medium ${
+            darkMode ? "text-gray-300" : "text-gray-700"
+          }`}
+        >
+          {post.author.fields.name}
+        </span>
+      </div>
+      <div className="mt-6">
+        {documentToReactComponents(post.content, richTextOptions)}
+      </div>
+    </div>
+  );
+}

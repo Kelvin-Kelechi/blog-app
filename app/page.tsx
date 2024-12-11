@@ -1,14 +1,14 @@
 import { client } from "@/lib/contentful";
 import BlogContent from "@/components/Content/Content";
 
-interface BlogPost {
+ export interface BlogPost {
   title: string;
   slug: string;
   content: string;
   imageUrl?: string;
 }
 
-async function fetchPosts(): Promise<BlogPost[]> {
+ export async function fetchPosts(): Promise<BlogPost[]> {
   try {
     const res = await client.getEntries({ content_type: "blogPost" });
     return res.items.map((item: any) => ({
@@ -26,8 +26,7 @@ async function fetchPosts(): Promise<BlogPost[]> {
 }
 
 const HomePage = async () => {
-  const posts = await fetchPosts(); // Server-side fetching
-  console.log("check=>", posts);
+  const posts = await fetchPosts();  
 
   return <BlogContent posts={posts} />;
 };

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const PostCard: React.FC<{ post: any }> = ({ post }) => {
+const PostDetail: React.FC<{ post: any }> = ({ post }) => {
   const { darkMode } = useDarkMode();
 
   const { title, slug, excerpt, imageUrl, author, date } = post;
@@ -27,19 +27,19 @@ const PostCard: React.FC<{ post: any }> = ({ post }) => {
         </div>
 
         <div className="flex items-center mb-4">
-          <Image
-            width={50}
-            height={50}
-            src={`https:${author.fields.picture.fields.file.url}`}
-            alt=""
-            className="w-10 h-10 rounded-full object-cover mr-3"
-          />
+          {/* <Image
+          width={50}
+          height={50}
+          src=" "
+          alt=""
+          className="w-10 h-10 rounded-full object-cover mr-3"
+        /> */}
           <span
             className={`text-sm font-medium ${
               darkMode ? "text-gray-300" : "text-gray-700"
             }`}
           >
-            {author.fields.name}
+            {}
           </span>
         </div>
 
@@ -73,4 +73,4 @@ const PostCard: React.FC<{ post: any }> = ({ post }) => {
   );
 };
 
-export default PostCard;
+export default PostDetail;
