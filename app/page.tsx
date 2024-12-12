@@ -18,6 +18,7 @@ import BlogContent from "@/components/Content/Content";
       imageUrl: item.fields.featuredImage?.fields?.file?.url || "",
       excerpt: item.fields.excerpt || "",
       author: item.fields.author || "",
+      date: item.fields.date || "",
     }));
   } catch (error) {
     console.error("Error fetching posts:", error);

@@ -2,7 +2,8 @@ import React from "react";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import Image from "next/image";
-
+import { format, parseISO } from "date-fns"; 
+import Link from "next/link";
 export default function PostContent({
   darkMode,
   post,
@@ -16,12 +17,13 @@ export default function PostContent({
         <p className={darkMode ? "text-white" : "text-black"}>{children}</p>
       ),
       [INLINES.HYPERLINK]: (node: any, children: any) => (
-        <a href={node.data.uri} className="text-blue-500 underline">
+        <Link href={node.data.uri} className="text-blue-500 underline">
           {children}
-        </a>
+        </Link>
       ),
     },
   };
+   const formattedDate = format(parseISO(post.date), "MMMM d, yyyy"); 
 
   return (
     <div>
@@ -47,11 +49,11 @@ export default function PostContent({
           className="w-10 h-10 rounded-full object-cover mr-3"
         />
         <span
-          className={`text-sm font-medium ${
+          className={`text-sm font-bold ${
             darkMode ? "text-gray-300" : "text-gray-700"
           }`}
         >
-          {post.author.fields.name}
+          {post.author.fields.name}  || {formattedDate}
         </span>
       </div>
       <div className="mt-6">

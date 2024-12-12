@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useDarkMode } from "../providers/DarkmodeProvider";
-import DetailRightSection from "@/components/DetailRightSection/DetailRightSection";
+import RecentPosts from "@/components/RecentPosts/RecentPosts";
 import PostContent from "@/components/PostContent/PostContent";
 import { usePosts } from "../providers/PostProvider";
+import { InfinitySpin } from "react-loader-spinner";
 
 export default function PostDetail({
   params: paramsPromise,
@@ -26,7 +27,7 @@ export default function PostDetail({
     return (
       <div className={darkMode ? "bg-black text-white" : "bg-white text-black"}>
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold">Loading...</h1>
+          <InfinitySpin width="200" color="#4fa94d" />
         </div>
       </div>
     );
@@ -37,9 +38,8 @@ export default function PostDetail({
   if (!post) {
     return (
       <div className={darkMode ? "bg-black text-white" : "bg-white text-black"}>
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold">Post Not Found</h1>
-          <p className="mt-4">The post you are looking for does not exist.</p>
+        <div className="container flex justify-center mx-auto px-4 py-48">
+          <InfinitySpin width="200" color="#AB47BC" />
         </div>
       </div>
     );
@@ -49,7 +49,6 @@ export default function PostDetail({
     <div className={darkMode ? "bg-black" : "bg-white"}>
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Section - Post Content */}
           <div
             className={`md:col-span-2 p-6 rounded-lg shadow-md ${
               darkMode ? "bg-gray-900" : "bg-gray-100"
@@ -58,8 +57,7 @@ export default function PostDetail({
             <PostContent darkMode={darkMode} post={post} />
           </div>
 
-          {/* Right Section */}
-          <DetailRightSection posts={posts} />
+          <RecentPosts posts={posts} />
         </div>
       </div>
     </div>

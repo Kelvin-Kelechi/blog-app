@@ -2,20 +2,22 @@ import { useDarkMode } from "@/app/providers/DarkmodeProvider";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import dayjs from "dayjs";  
 
 const PostCard: React.FC<{ post: any }> = ({ post }) => {
   const { darkMode } = useDarkMode();
 
   const { title, slug, excerpt, imageUrl, author, date } = post;
-
+  const formattedDate = dayjs(date).format("MMMM D, YYYY"); 
   return (
-    <Link href={`/${slug}`}>
-      {" "}
+   
+    
       <div
         className={`p-6 rounded-lg shadow-md ${
           darkMode ? "bg-gray-800" : "bg-gray-200"
         }`}
       >
+        
         <div className="mb-4">
           <Image
             src={`https:${imageUrl}`}
@@ -35,11 +37,11 @@ const PostCard: React.FC<{ post: any }> = ({ post }) => {
             className="w-10 h-10 rounded-full object-cover mr-3"
           />
           <span
-            className={`text-sm font-medium ${
+            className={`text-sm font-bold ${
               darkMode ? "text-gray-300" : "text-gray-700"
             }`}
           >
-            {author.fields.name}
+            {author.fields.name} || {formattedDate}
           </span>
         </div>
 
@@ -59,7 +61,7 @@ const PostCard: React.FC<{ post: any }> = ({ post }) => {
         </p>
 
         <Link
-          href="/post/1"
+          href={`/${slug}`}
           className={`mt-4 block ${
             darkMode
               ? "text-purple-500 hover:underline"
@@ -69,7 +71,7 @@ const PostCard: React.FC<{ post: any }> = ({ post }) => {
           Read more
         </Link>
       </div>
-    </Link>
+ 
   );
 };
 

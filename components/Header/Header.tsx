@@ -5,14 +5,11 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import { useDarkMode } from "@/app/providers/DarkmodeProvider";
 import { BiSolidGridAlt } from "react-icons/bi";
 import { usePosts } from "@/app/providers/PostProvider";
-const posts = [
-  { id: 1, title: "Understanding React" },
-  { id: 2, title: "Introduction to Next.js" },
-  { id: 3, title: "Mastering Tailwind CSS" },
-];
+import Link from "next/link";
+
 const Header = () => {
   const { posts } = usePosts();
- 
+
   const { darkMode, toggleDarkMode } = useDarkMode();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +29,12 @@ const Header = () => {
       );
     }
   };
-
+  const Links = [
+    { link: "Home", href: "/" },
+    { link: "About", href: "/about" },
+    { link: "Services", href: "/services" },
+    { link: "Contact", href: "/contact" },
+  ];
   return (
     <header
       className={`${
@@ -41,22 +43,15 @@ const Header = () => {
     >
       <div className="container mx-auto flex items-center justify-between px-4 py-2">
         <div className="text-2xl md:text-3xl font-poppins font-bold text-purple-600 hover:text-purple-400 transition duration-300">
-          <a href="/">Purplify</a>
+          <Link href="/">Purplify</Link>
         </div>
 
         <nav className="hidden md:flex space-x-6">
-          <a href="/home" className="hover:text-gray-500">
-            Home
-          </a>
-          <a href="/about" className="hover:text-gray-500">
-            About
-          </a>
-          <a href="/services" className="hover:text-gray-500">
-            Services
-          </a>
-          <a href="/contact" className="hover:text-gray-500">
-            Contact
-          </a>
+          {Links.map((link, i) => (
+            <Link key={i} href={link.href} className="hover:text-gray-500">
+              {link.link}
+            </Link>
+          ))}
         </nav>
 
         <div className="relative hidden md:block w-64">
@@ -88,15 +83,15 @@ const Header = () => {
             >
               {filteredPosts.length > 0 ? (
                 filteredPosts.map((post, i) => (
-                  <a
+                  <Link
                     key={i}
-                    href={`/posts/${post.slug}`}
+                    href={`/${post.slug}`}
                     className={`block px-4 py-2 text-sm hover:bg-purple-500 ${
                       darkMode ? "" : "hover:text-white"
                     }`}
                   >
                     {post.title}
-                  </a>
+                  </Link>
                 ))
               ) : (
                 <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
@@ -160,30 +155,11 @@ const Header = () => {
           }   transition-all duration-300`}
         >
           <div className="flex flex-col space-y-4 p-4">
-            <a
-              href="/home"
-              className="hover:text-gray-500 dark:hover:text-gray-300"
-            >
-              Home
-            </a>
-            <a
-              href="/about"
-              className="hover:text-gray-500 dark:hover:text-gray-300"
-            >
-              About
-            </a>
-            <a
-              href="/services"
-              className="hover:text-gray-500 dark:hover:text-gray-300"
-            >
-              Services
-            </a>
-            <a
-              href="/contact"
-              className="hover:text-gray-500 dark:hover:text-gray-300"
-            >
-              Contact
-            </a>
+            {Links.map((link, i) => (
+              <Link key={i} href={link.href} className="hover:text-gray-500">
+                {link.link}
+              </Link>
+            ))}
           </div>
         </nav>
       )}

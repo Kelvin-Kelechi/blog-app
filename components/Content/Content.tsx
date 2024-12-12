@@ -37,7 +37,7 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
   if (!posts) {
     return <div>No posts available</div>;
   }
-console.log('=>', posts)
+  console.log("=>", posts);
   return (
     <div className={darkMode ? "bg-black" : "bg-white"}>
       <div className="container mx-auto px-4 py-6">
@@ -68,7 +68,9 @@ console.log('=>', posts)
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 {currentPosts.map((post: any, index: any) => (
-                  <PostCard key={post.slug} post={post} />
+                  <Link key={index} href={`/${post.slug}`}>
+                    <PostCard key={post.slug} post={post} />
+                  </Link>
                 ))}
               </div>
             )}

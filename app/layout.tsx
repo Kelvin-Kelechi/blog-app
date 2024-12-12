@@ -5,6 +5,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import { DarkModeProvider } from "./providers/DarkmodeProvider";
 import { PostProvider } from "./providers/PostProvider";
+ 
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,8 +27,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) 
-{
+}>) {
   return (
     <html lang="en">
       <body

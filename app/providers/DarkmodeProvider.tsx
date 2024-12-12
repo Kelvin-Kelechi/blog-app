@@ -8,24 +8,20 @@ import {
   useEffect,
 } from "react";
 
-// Define the context type
 interface DarkModeContextType {
   darkMode: boolean;
   toggleDarkMode: () => void;
 }
 
-// Create the context with default values
 const DarkModeContext = createContext<DarkModeContextType | undefined>(
   undefined
 );
 
-// Create the provider component
 export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   const [darkMode, setDarkMode] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Check for dark mode preference in localStorage or system preference
     const storedMode = localStorage.getItem("darkMode");
     const prefersDarkMode = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -35,21 +31,19 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
       storedMode !== null ? storedMode === "true" : prefersDarkMode;
     setDarkMode(initialMode);
 
-    // Apply the initial mode immediately
     if (initialMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
 
-    setIsInitialized(true); // Mark initialization as complete
+    setIsInitialized(true);
   }, []);
 
   const toggleDarkMode = () => {
     setDarkMode((prev) => {
       const newMode = !prev;
 
-      // Persist mode and update class
       if (newMode) {
         document.documentElement.classList.add("dark");
         localStorage.setItem("darkMode", "true");
@@ -63,7 +57,7 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   if (!isInitialized) {
-    return null; // Optionally render a loader or nothing
+    return null;
   }
 
   return (
@@ -73,7 +67,6 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook to use dark mode context
 export const useDarkMode = () => {
   const context = useContext(DarkModeContext);
   if (!context) {
