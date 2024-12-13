@@ -35,7 +35,13 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
   };
 
   if (!posts) {
-    return <div>No posts available</div>;
+    return (
+      <div className={darkMode ? "bg-black text-white" : "bg-white text-black"}>
+        <div className="container flex justify-center mx-auto px-4 py-48">
+          <h2 className="text-xl md:text-2xl"> No post available</h2>
+        </div>
+      </div>
+    );
   }
   console.log("=>", posts);
   return (
@@ -74,6 +80,7 @@ const BlogContent: React.FC<{ posts: BlogPost[] }> = ({ posts }) => {
                 ))}
               </div>
             )}
+            
             {totalPages > 1 && (
               <div className="mt-6 flex justify-center space-x-4">
                 <button

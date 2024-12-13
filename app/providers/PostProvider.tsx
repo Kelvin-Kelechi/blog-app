@@ -1,5 +1,6 @@
 "use client";
 
+import { BlogPost, fetchPosts } from "@/lib/contentful";
 import React, {
   createContext,
   useContext,
@@ -7,7 +8,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { BlogPost, fetchPosts } from "../page";
+ 
 
 interface PostContextType {
   posts: BlogPost[];

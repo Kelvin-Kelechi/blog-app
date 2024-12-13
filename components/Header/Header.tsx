@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useDarkMode } from "@/app/providers/DarkmodeProvider";
-import { BiSolidGridAlt } from "react-icons/bi";
 import { usePosts } from "@/app/providers/PostProvider";
 import Link from "next/link";
-
+import { TbMenu } from "react-icons/tb";
+import { IoMdClose } from "react-icons/io";
 const Header = () => {
   const { posts } = usePosts();
 
@@ -106,10 +106,17 @@ const Header = () => {
           className="md:hidden text-gray-200 focus:outline-none"
           onClick={() => setIsMobileMenuOpen((prev) => !prev)}
         >
-          <BiSolidGridAlt
-            size={25}
-            className={`${darkMode ? "" : "text-gray-800"}`}
-          />
+          {isMobileMenuOpen ? (
+            <IoMdClose
+              size={25}
+              className={`${darkMode ? "" : "text-gray-800"}`}
+            />
+          ) : (
+            <TbMenu
+              size={25}
+              className={`${darkMode ? "" : "text-gray-800"}`}
+            />
+          )}
         </button>
 
         <div className="flex items-center">

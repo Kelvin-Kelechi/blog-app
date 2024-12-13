@@ -15,13 +15,13 @@ const Footer = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        {/* Top Section */}
+   
         <div
           className={`grid grid-cols-1 md:grid-cols-3 gap-8 border-b ${
             darkMode ? "border-gray-700" : "border-gray-300"
           } pb-6`}
         >
-          {/* About Section */}
+  
           <div>
             <h3
               className={`text-xl font-bold mb-4 ${
@@ -83,7 +83,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className={`hover:text-white h-[50px] ${
                     darkMode ? "text-gray-200" : "text-gray-900"
-                  } text-3xl`} // Increased the icon size here
+                  } text-3xl`}  
                 >
                   {React.createElement(link.icon)}
                 </Link>
