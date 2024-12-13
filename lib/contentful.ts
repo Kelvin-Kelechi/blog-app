@@ -9,7 +9,11 @@ export interface BlogPost {
   author?: string;
   date?: string;
 }
-
+export interface AboutUsContent {
+  title: string;
+  content: string;
+  imageUrl?: string;
+}
 export async function fetchPosts(): Promise<BlogPost[]> {
   try {
     const res = await client.getEntries({ content_type: "blogPost" });
@@ -28,10 +32,7 @@ export async function fetchPosts(): Promise<BlogPost[]> {
   }
 }
 
-const spaceId = "8b30oz6ewy5i";
-const accessToken = "shuZJ0RHQYm5FhPWoRxYi6fR_h04zTFSREGiSNWhZ_o";
-
 export const client = createClient({
-  space: spaceId,
-  accessToken: accessToken,
+  space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
+  accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN!,
 });
